@@ -15,6 +15,27 @@ Mini-OS 在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen�
  * 使用hypercall：HYPERVISOR_update_va_mapping把shared_info页映射到0x2000
  * 注册回调句柄(callback handlers)
 {{{
+// 通过set_callbacks()，注册各种event和failsafe的处理函数
 set_callbacks(unsigned long event_selector, unsigned long event_address, unsigned long failsafe_selector, unsigned long failsafe_address)
 }}}
- 通过set_callbacks()，注册各种event和failsafe的处理函数。
+
+== trap_init() ==
+
+注册陷阱表(trap handler table)，通常定义于Mini-OS的arch/x86/x86_32.h中。
+{{{
+void trap_init(void)
+{
+    HYPERVISOR_set_trap_table(trap_table);
+}
+}}}
+
+== init_mm() ==
+
+该例程初始化Mini-OS的内存管理功能。
+ * arch_init_mm()
+   首先计算Mini-OS可以使用的页帧数。在Mini-OS中，_text段起始于0x00，虚拟地址和客户物理地址是一致的。
+然后调用build_pagetables(start_pfg,max_pfn)，建立页表。每增加一个页表项，调用HYPERVISOR_mmu_update()同步到hypervisor中。
+ * arch_init_p2m()
+   初始化HYPERVISOR_shared_info->arch.pfg_to_mfn_frame_list结构体，它记录了客户机页帧到物理机页帧的映射。
+ * arch_init_demand_mapping_area()
+   创建一个额外的PTE，可以用来按需地映射max_pfn之上的页地址。
