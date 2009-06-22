@@ -37,4 +37,4 @@ void trap_init(void)
  * arch_init_p2m()
   初始化HYPERVISOR_shared_info->arch.pfg_to_mfn_frame_list结构体，它记录了客户机页帧到物理机页帧的映射。
  * arch_init_demand_mapping_area()
-  创建一个额外的PTE，可以用来按需地映射max_pfn之上的页地址。
+  创建一个额外的PTE，可以用来按需地映射大于max_pfn页地址。
