@@ -5,7 +5,7 @@ Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有�
   * [IntroductionToMiniosApplications#Mini-OS启动简介]
    * [IntroductionToMiniosApplications#arch_init()]
    * [IntroductionToMiniosApplications#trap_init()]
-   * [init_mm()]
+   * [# init_mm()]
 
 
 =Mini-OS启动简介=
