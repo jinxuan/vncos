@@ -64,10 +64,9 @@ Library OS选择Mini-OS为其kernel，主要原因是Mini-OS有完善的支持Xe
 === 域间通信IDC ===
 
 IDC是由Xen的事件通道实现的，包含读写两个IO环。IDC做为一个内核模块，向上层应用暴漏6个接口。
- * Init：	初始化一个通道
- * Close：	关闭一个通道
- * Create：	允许用户向通道写数据，用户要有目标域的ID
- * Connect：允许用户在通道中读数据
- * Write：	向通道中写
- * Read：	在通道中读
-
+ * Init:      初始化一个通道
+ * Close:     关闭一个通道
+ * Create:    允许用户向通道写数据，用户要有目标域的ID
+ * Connect:   允许用户在通道中读数据
+ * Write:     向通道中写
+ * Read:      在通道中读
