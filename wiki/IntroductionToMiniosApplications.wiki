@@ -67,10 +67,65 @@ Library OS选择Mini-OS为其kernel，主要原因是Mini-OS有完善的支持Xe
 
   http://vncos.googlecode.com/svn/trunk/picture/Inter-domain_communications_using_a_shared_ring.JPG
 
-IDC是由Xen的事件通道实现的，包含读写两个IO环。IDC做为一个内核模块，向上层应用暴漏6个接口。
+IDC是由Xen的事件通道实现的，包含读写两个IO环。IDC做为一个内核模块，向上层应用暴露6个接口。
  * Init:      初始化一个通道
  * Close:     关闭一个通道
  * Create:    允许用户向通道写数据，用户要有目标域的ID
  * Connect:   允许用户在通道中读数据
  * Write:     向通道中写
  * Read:      在通道中读
+
+== Xen Library OS的应用 ==
+
+  http://vncos.googlecode.com/svn/trunk/picture/vTPM_software_architecture_for_xen.JPG
+
+Xen 3.0的vTPM驱动体系结构如图所示。所有的vTPM操作都有Domain0完成。
+
+  http://vncos.googlecode.com/svn/trunk/picture/modified_vTPM_software_architecture.JPG
+
+如图所示，vTPM的守护进程置于Domain0中，而vTPM的实际模拟器放入Library OS中，它们之间通过IDC联系。并且使用修改过的GNU工具链编译安装vTPM emulator。DomainU通过vTPM前段驱动将请求发往Domaoin0的后端驱动，vTPM的守护进程转发请求到Domain0的IDC，实际由Library OS处理请求。
+
+修改Domain0的vTPM守护进程大概花费了200行代码，而修改vTPM emulator更少于500行代码。
+
+该结构的缺点是显而易见的，由于每个DomU都配属相应的Trust Dom，使得一些操作变得非常繁琐，比如虚拟域热迁移等。
+
+= 轻量级Xen Domain =
+
+== 轻量级Xen Domain的设计与实现 ==
+
+该轻量级Xen Domain 保留了Library OS的所有特性，包括cross-development环境、newlib库和IDC机制，并优化部分环境，更适合HPC(High Performance Computing)应用。
+
+  http://vncos.googlecode.com/svn/trunk/picture/structure_of_our_lightweight_guest_domain.JPG
+
+如图所示，轻量级Xen Domain的设计思想是将Mini-OS内核、C库、IP堆栈、执行环境和单个应用程序有机的整合在一起。在技术方面看，需要安装一个plain ELF cross-compilation chain，即以plain ELF为目标建立可交叉编译的binutils和gcc。然后用交叉编译工具编译和安装各种C库，它们和Mini-OS有同样的内核C flag。
+
+LwIP提供了一个轻量级的TCP/IP协议栈，它与Mini-OS中的Network frontend相连接。Newlib提供了一个标准C库，它比庞大的GNU libc更适用于轻量级环境。但需要修改部分newlib的系统调用：
+
+ * Mini-OS没有传统UNIX进程概念，getpid及其相似函数只输出某特定值，比如1
+ * Mini-OS没有使用信号，可以忽略各种sig函数
+ * 适当修改的函数：
+   # Sleep和gettimeofday必须小心的设计，使其符合虚拟化应用
+   # Mmap只负责处理匿名内存(anonymous memory)，而不用实现映射普通文件和为无关联的进程提供共享空间的功能。
+
+该系统还实现了一个瘦虚拟文件层(thin virtual file layer)，它对控制台、文件、块设备、网络设备以及TCP/IP协议函数提供统一的支持。实现思想是依靠文件描述符识别目标文件的类型，然后将操作重定向到Mini-OS的各个前端驱动或者内核模块的底层函数上。
+
+轻量级Xen Domain的进程调度完全依靠Mini-OS实现。Mini-OS提供非抢占式的多线程，并且目前只支持单虚拟CPU。这些线程由一个运行队列维护，它们之间没有优先权的差异。Mini-OS的内核也不需要支持任何自旋锁机制。
+在内存管理方面借鉴了HPC(High Performance Computer)常用的sparse data机制，提供内存读写效率。
+
+为提高读写磁盘的效率，应用了类似“零拷贝”的技术，IO操作不再由缓冲区缓冲。这意味着应用程序可以直接控制各种磁盘操作，不经过Mini-OS缓冲。
+
+== 轻量级Xen Domain的应用—HVM stub domain ==
+
+  http://vncos.googlecode.com/svn/trunk/picture/Stubdomain_approach.JPG
+
+剑桥团队应用该轻量级Xen Domain将 qemu移到一个单独的驱动域中。由于Mini-OS调度非常简单并且只运行qemu一个程序，大大简化了hypervisor的调度和审计工作。在stubdom 中，qemu可以直接调用系统服务，不需要经过用户、内核两态的转换，提高了效率。
+
+= Ethos - An Operating system for the Xen hypervisor =
+
+Ethos 是UIC(University of Illinois at Chicago)正在开发的一款基于Xen和Mini-OS的轻量级操作系统。它开发的初衷是为了避免开发驱动程序、文件系统和网络设备。Ethos做为一个内核，只向外提供进程和系统调用接口。该项目的负责人Prof. Solworth称其为"Paired-OS"。
+
+  http://vncos.googlecode.com/svn/trunk/picture/Ethos_structure.JPG
+
+Xen上同时运行Ethos和标准linux。Ethos将文件系统、网络和设备驱动托管给linux，剩余部分由Ethos实现。
+
+目前该项工作正在进展之中。
