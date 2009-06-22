@@ -51,6 +51,8 @@ Xen Library OS 是一个类虚拟化的操作系统，它由四部分组成：
  * Mini-OS内核
  * 域间通信机制IDC，基于Xen共享内存和时间通道实现
 
+http://code.google.com/p/vncos/source/browse/trunk/picture/overview_of_application_and_libraries.JPG
+
 === 开发工具链 ===
 
 加入一个基于GNU工具链的cross-development环境，目的是获得最大的代码兼容性。Linux上的进程可以兼容的运行在Library OS上。通过修改GNU编译器和二进制工具来支持新的目标体系结构。Library OS的编译器称作i386-minios-gcc，它的头文件、库和加载器都被重写。
