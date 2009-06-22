@@ -32,9 +32,42 @@ void trap_init(void)
 == init_mm() ==
 
 该例程初始化Mini-OS的内存管理功能。
+
  * arch_init_mm()
   首先计算Mini-OS可以使用的页帧数。在Mini-OS中，text段起始于0x00，虚拟地址和客户物理地址是一致的。然后调用build_pagetables(start_pfg,max_pfn)，建立页表。每增加一个页表项，调用HYPERVISOR_mmu_update()同步到hypervisor中。
  * arch_init_p2m()
   初始化HYPERVISOR_shared_info->arch.pfg_to_mfn_frame_list结构体，它记录了客户机页帧到物理机页帧的映射。
  * arch_init_demand_mapping_area()
   创建一个额外的PTE，可以用来按需地映射大于max_pfn页地址。
+
+= Xen Library OS =
+
+== Xen Library OS的设计与实现 ==
+
+Xen Library OS 是一个类虚拟化的操作系统，它由四部分组成：
+
+ * 一个基于GNU工具链的cross-development环境
+ * Red Hat的newlib C库
+ * Mini-OS内核
+ * 域间通信机制IDC，基于Xen共享内存和时间通道实现
+
+=== 开发工具链 ===
+
+加入一个基于GNU工具链的cross-development环境，目的是获得最大的代码兼容性。Linux上的进程可以兼容的运行在Library OS上。通过修改GNU编译器和二进制工具来支持新的目标体系结构。Library OS的编译器称作i386-minios-gcc，它的头文件、库和加载器都被重写。
+
+=== Library OS ===
+
+Library OS使用Red Hat的newlib C库支持C程序。但需要修改newlib库以适应Library OS，比如一些函数fork、exec等都不能在新的目标体系结构中使用。
+Library OS选择Mini-OS为其kernel，主要原因是Mini-OS有完善的支持Xen类虚拟化接口，Xen社区对其提供维护。
+由于程序、库、内核都运行在一个地址空间中，所以Library OS适合运行小的可信服务，而不是一般的用户程序。
+
+=== 域间通信IDC ===
+
+IDC是由Xen的事件通道实现的，包含读写两个IO环。IDC做为一个内核模块，向上层应用暴漏6个接口。
+ * Init：	初始化一个通道
+ * Close：	关闭一个通道
+ * Create：	允许用户向通道写数据，用户要有目标域的ID
+ * Connect：允许用户在通道中读数据
+ * Write：	向通道中写
+ * Read：	在通道中读
+
