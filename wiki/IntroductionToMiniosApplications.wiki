@@ -11,10 +11,10 @@ Mini-OS 在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen�
 == arch_init() ==
 
  * 将start_info数据结构拷贝到内核映像的一片全局区中(start_info_union.start_info)
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+ * 将全局变量phys_to_machine_mapping(mm.c)指向现有的P2M表(start_info.mfn_list)
+ * 使用hypercall：HYPERVISOR_update_va_mapping把shared_info页映射到0x2000
+ * 注册回调句柄(callback handlers)
+{{{
+set_callbacks(unsigned long event_selector, unsigned long event_address, unsigned long failsafe_selector, unsigned long failsafe_address)
+}}}
+ 通过set_callbacks()，注册各种event和failsafe的处理函数。
