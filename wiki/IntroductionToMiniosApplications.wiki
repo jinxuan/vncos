@@ -33,9 +33,8 @@ void trap_init(void)
 
 该例程初始化Mini-OS的内存管理功能。
  * arch_init_mm()
-  首先计算Mini-OS可以使用的页帧数。在Mini-OS中，text段起始于0x00，虚拟地址和客户物理地址是一致的。
-然后调用build_pagetables(start_pfg,max_pfn)，建立页表。每增加一个页表项，调用HYPERVISOR_mmu_update()同步到hypervisor中。
+ 首先计算Mini-OS可以使用的页帧数。在Mini-OS中，text段起始于0x00，虚拟地址和客户物理地址是一致的。然后调用build_pagetables(start_pfg,max_pfn)，建立页表。每增加一个页表项，调用HYPERVISOR_mmu_update()同步到hypervisor中。
  * arch_init_p2m()
-  初始化HYPERVISOR_shared_info->arch.pfg_to_mfn_frame_list结构体，它记录了客户机页帧到物理机页帧的映射。
+ 初始化HYPERVISOR_shared_info->arch.pfg_to_mfn_frame_list结构体，它记录了客户机页帧到物理机页帧的映射。
  * arch_init_demand_mapping_area()
-  创建一个额外的PTE，可以用来按需地映射max_pfn之上的页地址。
+ 创建一个额外的PTE，可以用来按需地映射max_pfn之上的页地址。
