@@ -4,7 +4,7 @@ Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有�
 
 = Mini-OS启动简介 =
 
-Mini-OS 在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。
+Mini-OS在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。
 
 *start_kerel()* 是启动Mini-OS的例程。它调用了一些初始化函数，然后建立了三个内核线程。由于Mini-OS是不可抢占的并只能运行单线程的操作系统，所以这三个内核线程依次被创建。
 
@@ -132,12 +132,12 @@ Xen上同时运行Ethos和标准linux。Ethos将文件系统、网络和设备�
 
 = 参考文献 =
 
-[1].Satya Popuri, A tour of the Mini-OS kernel, http://www.cs.uic.edu/~spopuri/minios.html
+1.Satya Popuri, A tour of the Mini-OS kernel, http://www.cs.uic.edu/~spopuri/minios.html
 
-[2].M.J. Anderson, M. Moffie, and C.I. Dalton. Towards Trustworthy Virtualisation Environments: Xen Library OS Security Service Infrastructure. Technical Report HPL-2007-69, Hewlett-Packard Development Company, L.P., April 2007. 
+2.M.J. Anderson, M. Moffie, and C.I. Dalton. Towards Trustworthy Virtualisation Environments: Xen Library OS Security Service Infrastructure. Technical Report HPL-2007-69, Hewlett-Packard Development Company, L.P., April 2007. 
 
-[3].Samuel Thibault and Tim Deegan. Improving performance by embedding hpc applications in lightweight xen domains. In HPCVirt '08: Proceedings of the 2nd workshop on Systemlevel virtualization for high performance computing, pages 9--15, New York, NY, USA, 2008. ACM. 
+3.Samuel Thibault and Tim Deegan. Improving performance by embedding hpc applications in lightweight xen domains. In HPCVirt '08: Proceedings of the 2nd workshop on Systemlevel virtualization for high performance computing, pages 9--15, New York, NY, USA, 2008. ACM. 
 
-[4].Satya Popuri, Ethos - An Operating system for the Xen hypervisor, http://www.cs.uic.edu/~spopuri/ethos.html
+4.Satya Popuri, Ethos - An Operating system for the Xen hypervisor, http://www.cs.uic.edu/~spopuri/ethos.html
 
-[5].Jon A. Solworth, Ethos: an operating system which creates a culture of security, http://www.rites.uic.edu/~solworth/ethos.html
+5.Jon A. Solworth, Ethos: an operating system which creates a culture of security, http://www.rites.uic.edu/~solworth/ethos.html
