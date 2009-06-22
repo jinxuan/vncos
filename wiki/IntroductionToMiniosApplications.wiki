@@ -1,5 +1,5 @@
-#summary One-sentence summary of this page.
-#Mini-os现有应用简介
+#intruction to mini-os applications
+
   Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有一些基于Mini-OS的应用：HP实验室在2007年发布了基于Mini-OS的Xen Library OS；2008年剑桥大学进一步完善了HP的工作，完成了HVM stubdom并置于Xen源码树中；伊利诺伊大学芝加哥分校(UIC)正致力于开发一款基于Mini-OS的小内核系统—Ethos。
 
 = Mini-OS启动简介 =
