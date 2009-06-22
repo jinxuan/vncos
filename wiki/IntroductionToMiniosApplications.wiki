@@ -20,7 +20,7 @@ Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有�
 
 =Mini-OS 启动简介=
 
-Mini-OS在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。[#Mini-OS_启动简介 fff]
+Mini-OS在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。
 
 *start_kerel()* 是启动Mini-OS的例程。它调用了一些初始化函数，然后建立了三个内核线程。由于Mini-OS是不可抢占的并只能运行单线程的操作系统，所以这三个内核线程依次被创建。
 
