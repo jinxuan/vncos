@@ -2,6 +2,8 @@
 
 Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有一些基于Mini-OS的应用：HP实验室在2007年发布了基于Mini-OS的Xen Library OS；2008年剑桥大学进一步完善了HP的工作，完成了HVM stubdom并置于Xen源码树中；伊利诺伊大学芝加哥分校(UIC)正致力于开发一款基于Mini-OS的小内核系统—Ethos。
 
+[WikiSyntax#Mini-OS启动简介]
+
 = Mini-OS启动简介 =
 
 Mini-OS在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。
