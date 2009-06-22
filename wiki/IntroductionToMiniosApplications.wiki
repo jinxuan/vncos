@@ -51,7 +51,7 @@ Xen Library OS 是一个类虚拟化的操作系统，它由四部分组成：
  * Mini-OS内核
  * 域间通信机制IDC，基于Xen共享内存和时间通道实现
 
-http://code.google.com/p/vncos/source/browse/trunk/picture/overview_of_application_and_libraries.JPG
+   http://vncos.googlecode.com/svn/trunk/picture/overview_of_application_and_libraries.JPG
 
 === 开发工具链 ===
 
@@ -64,6 +64,8 @@ Library OS选择Mini-OS为其kernel，主要原因是Mini-OS有完善的支持Xe
 由于程序、库、内核都运行在一个地址空间中，所以Library OS适合运行小的可信服务，而不是一般的用户程序。
 
 === 域间通信IDC ===
+
+  http://vncos.googlecode.com/svn/trunk/picture/Inter-domain_communications_using_a_shared_ring.JPG
 
 IDC是由Xen的事件通道实现的，包含读写两个IO环。IDC做为一个内核模块，向上层应用暴漏6个接口。
  * Init:      初始化一个通道
