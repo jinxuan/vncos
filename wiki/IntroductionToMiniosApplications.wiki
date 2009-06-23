@@ -16,7 +16,7 @@ Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有�
    * [#轻量级Xen_Domain的设计与实现  轻量级Xen Domain的设计与实现]
    * [#轻量级Xen_Domain的应用—HVM_stub_domain 轻量级Xen Domain的应用—HVM stub domain]
   * [#Ethos_-_An_Operating_system_for_the_Xen_hypervisor Ethos - An Operating system for the Xen hypervisor]
-  * [#参考文献 参考文献]
+  * [#zh-CN(参考文献) 参考文献]
 
 = Mini-OS 启动简介 =
 
