@@ -18,7 +18,7 @@ Mini-OS是跟随Xen hypervisor发布的一款小内核操作系统，目前有�
   * [#Ethos_-_An_Operating_system_for_the_Xen_hypervisor Ethos - An Operating system for the Xen hypervisor]
   * [#参考文献 参考文献]
 
-=Mini-OS 启动简介=
+= Mini-OS 启动简介 =
 
 Mini-OS在*start* 处启动，加载SS和ESP指向的地址。KERNEL_SS由Xen的GDT提供，ESP指向的地址取自于*stack_start* 。ESI寄存器指向Mini-OS的*start_info_t* 结构体。ESI做为参数传入到启动函数*start_kerel()* 中。
 
