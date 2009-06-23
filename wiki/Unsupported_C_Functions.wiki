@@ -1,13 +1,27 @@
 #summary Mini-OS不支持的C函数
 
-= Introduction =
+在Mini-OS中调用以下函数会使系统crash
 
-Add your content here.
+== FS ==
 
+link,umask,relink
 
-= Details =
+== 以后版本中支持 ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+chdir
+
+== 动态库 ==
+
+dlopen,dlsym,dlerror,dlclose
+
+== 信号 ==
+
+sigemptyset,sigfillset,sigaddset,sigdelset,sigismember,sigprocmask,sigaction,__sigsetjmp,sigaltstack,kill
+
+== C调用 ==
+
+pipe,fork,execv,execve,waitpid,wait,lockf,sysconf,tcsetattr,tcgetattr,poll
+
+== net/if.h ==
+
+if_nametoindex,if_indextoname,if_freenameindex
